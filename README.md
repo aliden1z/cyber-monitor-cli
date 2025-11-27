@@ -24,27 +24,23 @@ I wanted something that looks cooler than the standard `top` command and gives m
 
 ## 📥 Installation
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/aliden1z/cyber-monitor-cli.git
-   cd cyber-monitor-cli
-   ```
+You can install Cyber Monitor globally with a single command. It will automatically set up an isolated environment for dependencies.
 
-2. Create a virtual environment (Recommended):
-   ```bash
-   # Linux / Mac
-   python3 -m venv venv
-   source venv/bin/activate
-   
-   # Windows
-   python -m venv venv
-   venv\Scripts\activate
-   ```
+```bash
+git clone https://github.com/aliden1z/cyber-monitor-cli.git
+cd cyber-monitor-cli
+sudo make install
+```
 
-3. Install the required packages:
-   ```bash
-   pip install -r requirements.txt
-   ```
+To run the dashboard:
+```bash
+cyber-monitor
+```
+
+To uninstall:
+```bash
+sudo make uninstall
+```
 
 ## 💻 Usage
 
