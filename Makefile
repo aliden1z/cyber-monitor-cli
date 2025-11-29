@@ -1,36 +1,44 @@
-# Cyber Monitor CLI - Installation Script
-# Installs dependencies into an isolated virtual environment
+# Cyber Monitor CLI - Makefile
+# System-wide installation script
 
 INSTALL_DIR = /opt/cyber-monitor
 BIN_DIR = /usr/local/bin
 EXEC_NAME = cyber-monitor
+PYTHON = python3
+
+.PHONY: install uninstall clean
 
 install:
-	@echo "🚀 Installing Cyber Monitor CLI..."
-	
-	# 1. Create installation directory and copy source files
+	@echo "[*] Installing Cyber Monitor CLI..."
+
+	@# 1. Prepare directories
+	@echo "    -> Creating installation directory: $(INSTALL_DIR)"
 	@mkdir -p $(INSTALL_DIR)
 	@cp monitor.py $(INSTALL_DIR)/
 	@cp requirements.txt $(INSTALL_DIR)/
-	
-	# 2. Create an isolated Virtual Environment (Venv)
-	@echo "📦 Creating virtual environment and installing dependencies..."
-	@python3 -m venv $(INSTALL_DIR)/venv
-	
-	# 3. Install required libraries (rich, psutil) into the venv
+
+	@# 2. Setup Virtual Environment
+	@echo "    -> Creating isolated virtual environment..."
+	@$(PYTHON) -m venv $(INSTALL_DIR)/venv
+
+	@# 3. Install Dependencies
+	@echo "    -> Installing dependencies (rich, psutil)..."
+	@$(INSTALL_DIR)/venv/bin/pip install -q --upgrade pip
 	@$(INSTALL_DIR)/venv/bin/pip install -q -r $(INSTALL_DIR)/requirements.txt
-	
-	# 4. Create the global executable wrapper script
+
+	@# 4. Create Wrapper Script
+	@echo "    -> Creating executable wrapper at $(BIN_DIR)/$(EXEC_NAME)"
 	@echo "#!/bin/bash" > $(BIN_DIR)/$(EXEC_NAME)
-	@echo "$(INSTALL_DIR)/venv/bin/python $(INSTALL_DIR)/monitor.py \"\$$@\"" >> $(BIN_DIR)/$(EXEC_NAME)
-	
-	# 5. Set executable permissions
+	@echo "exec $(INSTALL_DIR)/venv/bin/python $(INSTALL_DIR)/monitor.py \"\$$@\"" >> $(BIN_DIR)/$(EXEC_NAME)
+
+	@# 5. Permissions
 	@chmod +x $(BIN_DIR)/$(EXEC_NAME)
-	
-	@echo "✅ Success! Type '$(EXEC_NAME)' to start monitoring."
+
+	@echo "[+] Installation complete."
+	@echo "    Run '$(EXEC_NAME)' to start the dashboard."
 
 uninstall:
-	@echo "🗑️ Removing Cyber Monitor CLI..."
+	@echo "[*] Uninstalling Cyber Monitor CLI..."
 	@rm -rf $(INSTALL_DIR)
 	@rm -f $(BIN_DIR)/$(EXEC_NAME)
-	@echo "✅ Uninstalled successfully."
+	@echo "[-] System cleaned. Uninstallation successful."
